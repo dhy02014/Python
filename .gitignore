@@ -1,0 +1,7 @@
+*.json
+*.csv
+*.png
+.idea
+Lambda/hwork_1
+Lambda/Backup
+Lambda/pers_study
