@@ -48,7 +48,7 @@ class GetAccessInfo:  # Session Token을 얻기 위한 Class
         with open('RoleSessionToken.json', 'a', encoding='utf-8') as CreatFile:  # Session Token 정보 저장할 파일 지정
             CreatFile.truncate(0)
             _role_info = {}
-            for i in self._key:
+            for i in self._key:     # Assume Role Token을 Json 파일에 저장
                 _response = self._client_obj.pop(0).assume_role(
                     RoleArn=self._keyinfo[i]['Role'].get('RoleArn'),
                     RoleSessionName=self._keyinfo[i]['Role'].get('RoleSessionName'),
@@ -59,15 +59,20 @@ class GetAccessInfo:  # Session Token을 얻기 위한 Class
             CreatFile.write(dumps(_role_info, indent=4, default=str))
             #print(dumps(_role_info, indent=4, default=str))
 
-    def mfa_get_keyinfo(self):
-        for i in self._key:
-            otp = pyotp.TOTP(i).now()
-            self._key.append(otp)
-        _response = self._keyinfo.client.get_keyinfo_token(
-            DurationSeconds=900,
-            SerialNumber=self._keyinfo.otp_info()[1],
-            TokenCode=self._keyinfo.otp_info()[3]
-        )
+    def mfa_get_session_token(self):
+        with open('SessionToken.json', 'a', encoding='utf-8') as CreatFile:  # Session Token 정보 저장할 파일 지정
+            CreatFile.truncate(0)
+            _token_info = {}
+            for i in self._key:
+                if 'MFA' in self._keyinfo[i]:
+                    _otp = pyotp.TOTP(self._keyinfo[i]['MFA']['Code']).now()
+                    _response = self._client_obj.pop(0).get_session_token(
+                        DurationSeconds=900,
+                        SerialNumber=self._keyinfo[i]['MFA'].get('SerialNumber'),
+                        TokenCode=_otp
+                    )
+                    _token_info[self._key.pop(0)] = _response['Credentials']
+            CreatFile.write(dumps(_token_info, indent=4, default=str))
 
 #    def mfa_get_assume_role(self):
 #        for i in self._key:
@@ -84,7 +89,7 @@ class GetAccessInfo:  # Session Token을 얻기 위한 Class
 
 
 obj = GetAccessInfo()
-obj.get_assume_role()
+obj.get_session_token()
 
 
 def check_time():
