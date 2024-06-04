@@ -1,7 +1,7 @@
 *.json
 *.csv
 *.png
+__*__
 .idea
-Lambda/hwork_1
-Lambda/Backup
-Lambda/pers_study
+Code/Backup
+Code/pers_study
