@@ -1,17 +1,21 @@
 from json import dumps, load
 
+
 # 작성중
 class FileHandle:
-    def __init__(self, kind):
-        self._file = kind
+    def __init__(self):
+        pass
 
-    def read_file(self):
-        with open("Access"+self._file+"Info.json", 'r', encoding='utf-8') as file:
-            _keyinfo = load(file)
-        return _keyinfo
+    def read_keyfile(self):
+        with open("AccessKeyInfo.json", 'r', encoding='utf-8') as file:
+            _key_info = load(file)
+        return _key_info
 
-    def append_file(self):
-        with open("Access"+self._file+"Info.json", 'a', encoding='utf-8') as file:
+    def read_rolefile(self):
+        with open("RoleSessionToken.json", 'r', encoding='utf-8') as file:
+            _role_info = load(file)
+        return _role_info
 
-tmp = FileHandle('key')
-print(tmp.read_file())
+#    def append_rolefile(self):
+#        with open("RoleSessionToken.json", 'a', encoding='utf-8') as file:
+#            pass
