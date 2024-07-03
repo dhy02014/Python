@@ -1,12 +1,13 @@
 import requests
 import boto3
 import logging
+from Code.boto3.Common.khko_roleSession import RoleSession
 
-#logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#logger = logging.getLogger("slack")
-#logger.setLevel(logging.DEBUG)
-#stream_handler = logging.StreamHandler()
-#logger.addHandler(stream_handler)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("slack")
+logger.setLevel(logging.DEBUG)
+stream_handler = logging.StreamHandler()
+logger.addHandler(stream_handler)
 
 
 def create_token():
@@ -26,7 +27,7 @@ class Slack:
             )
         for i in cluster_list['clusters']:
             if 'khko' in i:
-                url = 'https://hooks.slack.com/services/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'
+                url = 'https://hooks.slack.com/services/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'
                 headers = {'Content-Type': 'application/json'}
                 data = {
                     "text": "EKS Cluster Resource가 존재 : " + i
@@ -40,12 +41,27 @@ def search_khko_resource():
         )
     for i in cluster_list['clusters']:
         if 'khko' in i:
-            url = 'https://hooks.slack.com/services/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'
+            url = 'https://hooks.slack.com/services/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'
             headers = {'Content-Type': 'application/json'}
             data = {
                 "text": "EKS Cluster Resource가 존재 : " + i
             }
             requests.post(url=url, headers=headers, json=data)
 
-def lambda_handler(event, context):
-    search_khko_resource()
+def local_slack_test():
+    _eks_client = RoleSession('eks')
+    _cluster_list = _eks_client.session_obj['mmc-khko'].list_clusters()
+    for i in _cluster_list['clusters']:
+        if 'khko' in i:
+            url = 'https://hooks.slack.com/services/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'
+            headers = {'Content-Type': 'application/json'}
+            data = {
+                "text": "EKS Cluster Resource가 존재 : " + i
+            }
+            requests.post(url=url, headers=headers, json=data)
+
+def lambda_handler():
+    #search_khko_resource()
+    local_slack_test()
+
+lambda_handler()
