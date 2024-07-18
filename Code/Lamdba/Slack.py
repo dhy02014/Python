@@ -1,5 +1,6 @@
 import requests
 import boto3
+import os
 import logging
 from Code.boto3.Common.khko_roleSession import RoleSession
 
@@ -27,7 +28,7 @@ class Slack:
             )
         for i in cluster_list['clusters']:
             if 'khko' in i:
-                url = 'https://hooks.slack.com/services/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'
+                url = os.environ['slack_url']
                 headers = {'Content-Type': 'application/json'}
                 data = {
                     "text": "EKS Cluster Resource가 존재 : " + i
@@ -41,7 +42,7 @@ def search_khko_resource():
         )
     for i in cluster_list['clusters']:
         if 'khko' in i:
-            url = 'https://hooks.slack.com/services/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'
+            url = os.environ['slack_url']
             headers = {'Content-Type': 'application/json'}
             data = {
                 "text": "EKS Cluster Resource가 존재 : " + i
@@ -53,7 +54,7 @@ def local_slack_test():
     _cluster_list = _eks_client.session_obj['mmc-khko'].list_clusters()
     for i in _cluster_list['clusters']:
         if 'khko' in i:
-            url = 'https://hooks.slack.com/services/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'
+            url = os.environ['slack_url']
             headers = {'Content-Type': 'application/json'}
             data = {
                 "text": "EKS Cluster Resource가 존재 : " + i
