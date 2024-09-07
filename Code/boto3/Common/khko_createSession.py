@@ -4,9 +4,7 @@ import boto3
 from json import dumps, load
 from pyotp import TOTP
 
-
 stime = time.time()
-
 
 logger = logging.getLogger("khko_get_session_2")
 stream_handler = logging.StreamHandler()
@@ -54,6 +52,7 @@ class GetAccessInfo:  # Session Token을 얻기 위한 Class
                     ExternalId=self._keyinfo[i]['Role'].get('ExternalId')
                 )
                 _role_info[i] = _response['Credentials']
+            print(dumps(_role_info, indent=4, default=str))
             CreatFile.write(dumps(_role_info, indent=4, default=str))
 
     def mfa_get_session_token(self):    # MFA를 활용 Access Key에 대한 Session Token 발급

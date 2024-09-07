@@ -1,9 +1,12 @@
+*.DS*
 *.json
 *.csv
 *.png
+test
 __*__
 .idea
 Code/Backup
 Code/pers_study
 Code/Terraform
-Code/Lamdba/lunch.py
+#Code/Lamdba
+Code/IAM

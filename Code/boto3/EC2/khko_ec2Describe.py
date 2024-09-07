@@ -5,7 +5,6 @@ from json import load, dumps
 from Code.boto3.Common.khko_roleSession import RoleSession
 
 
-
 def create_token():
     from Code.boto3.Common.khko_createSession import GetAccessInfo
     token = GetAccessInfo()
