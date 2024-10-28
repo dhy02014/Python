@@ -24,8 +24,7 @@ class Slack:
     def __init__(self):
         self.client = boto3.client('eks')
     def search_khko_resource(self):
-        cluster_list = self.client.list_clusters(
-            )
+        cluster_list = self.client.list_clusters()
         for i in cluster_list['clusters']:
             if 'khko' in i:
                 url = os.environ['slack_url']
